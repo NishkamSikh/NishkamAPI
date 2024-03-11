@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include partials/head %>
+    </head>
+    <body>
+        <% include partials/menu %>
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4 offset-md-4 col-sm-4 offset-sm-4">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+                    </div>
+
+                    <div class="heading-text py-4">
+                        <h1 class="text-center">Calendar</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="addTime">
+                        <!-- <div class="custom-control custom-radio custom-control-inline pb-3">
+                            <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" /><label class="custom-control-label" for="customRadioInline1">Application to all days operating</label>
+                        </div>
+                        <br>
+                        <div class="custom-control custom-radio custom-control-inline py-2">
+                            <input type="radio" onchange="change(this.value)" id="exampleRadios2" name="customRadioInline1" class="custom-control-input" />
+                            <label class="custom-control-label" for="customRadioInline2">Customize time per day</label>
+                        </div> -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" onchange="change(this.value)" name="exampleRadios" id="exampleRadios1" value="option1" checked="">
+                            <label class="form-check-label" for="exampleRadios1">
+                                Application to all days operating
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" onchange="change(this.value)" name="exampleRadios" id="exampleRadios2" value="option2">
+                            <label class="form-check-label" for="exampleRadios2">
+                                Customize time per day
+                            </label>
+                        </div>
+
+
+                        <div id="mon">
+                            <label for="exampleInputPassword1">Time Operating <span class="text-danger">*</span></label>
+                            <div class="row">
+                                <div class="col"><small for="from">From </small><input type="time" class="form-control" placeholder="First name"></div>
+                                <div class="col"><small for="from">To </small><input type="time" class="form-control" placeholder="Last name"></div>
+                            </div>
+                        </div>
+
+                        <div class="form">
+                            <form>
+                                <div class="form-group py-3" id="Province-div" style="display: none;">
+                                    <label>Select all days operating<span class="text-danger">*</span></label>
+                                    <ul class="nav nav-tabs pb-3" id="myTab" role="tablist">
+                                        <li class="nav-item"><a class="nav-link active" id="mon-tab" data-toggle="tab" href="#mon" role="tab" aria-controls="mon" aria-selected="true">Mon</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="tue-tab" data-toggle="tab" href="#tue" role="tab" aria-controls="tue" aria-selected="false">Tue</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="wed-tab" data-toggle="tab" href="#wed" role="tab" aria-controls="wed" aria-selected="false">Wed</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="thur-tab" data-toggle="tab" href="#thur" role="tab" aria-controls="thur" aria-selected="false">Thur</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="fri-tab" data-toggle="tab" href="#fri" role="tab" aria-controls="fri" aria-selected="false">Fri</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="sat-tab" data-toggle="tab" href="#sat" role="tab" aria-controls="sat" aria-selected="false">Sat</a></li>
+                                        <li class="nav-item"><a class="nav-link" id="sun-tab" data-toggle="tab" href="#sun" role="tab" aria-controls="sun" aria-selected="false">Sun</a></li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="mon" role="tabpanel" aria-labelledby="mon-tab">
+                                            <label for="exampleInputPassword1">Time Operating <span class="text-danger">*</span></label>
+                                            <div class="row">
+                                                <div class="col"><small for="from">From </small><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><small for="from">To </small><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tue" role="tabpanel" aria-labelledby="tue-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><small for="from">From </small><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><small for="from">To </small><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="wed" role="tabpanel" aria-labelledby="wed-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade show" id="thur" role="tabpanel" aria-labelledby="thur-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="fri" role="tabpanel" aria-labelledby="fri-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="sat" role="tabpanel" aria-labelledby="sat-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="sun" role="tabpanel" aria-labelledby="sun-tab">
+                                            <label for="exampleInputPassword1">Time Operating</label>
+                                            <div class="row">
+                                                <div class="col"><input type="time" class="form-control" placeholder="First name" /></div>
+                                                <div class="col"><input type="time" class="form-control" placeholder="Last name" /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn mt-3 btn-primary">Next</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="img-section p-4"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8YnVzaW5lc3N8ZW58MHx8MHw%3D&amp;ixlib=rb-1.2.1&amp;w=1000&amp;q=80" class="img-fluid"></div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <script>
+            function change(value) {
+                if (value == "option2") {
+                    document.getElementById("Province-div").style.display = "block";
+                    document.getElementById("mon").style.display = "none";
+                } else if (value == "option1") {
+                    document.getElementById("Province-div").style.display = "none";
+                    document.getElementById("mon").style.display = "block";
+                } else {
+                    document.getElementById("Province-div").style.display = "none";
+                    document.getElementById("mon").style.display = "block";
+                }
+            }
+            
+        </script>
+    </body>
+    <% include partials/script %>
+</html>

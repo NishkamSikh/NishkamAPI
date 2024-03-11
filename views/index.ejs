@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Static Website</title>
+<meta charset="utf-8">
+<meta name="active-menu" content="<%= menuId %>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="./stylesheets/style.css"> -->
+</head>
+<body>
+<div class="container py-5">    
+ 
+  <div class="row pt-5">
+    <div class="col-md-6 col-sm-12 offset-md-3">
+      <div style="border: 2px solid #cecaca; border-radius: 50px;" class="p-4 bg-white">
+      <img src="https://b2790432.smushcdn.com/2790432/wp-content/uploads/2022/07/Nishkam-logo-with-name.png?lossy=1&strip=1&webp=1" class="w-75 d-block m-auto pb-5 img-fluid">
+      <h1>Nishkam Sikh Welfare Council</h1>
+        <p>We are on a mission to empower and uplift every section of society, ensuring a better living and bringing cohesion.</p>
+        <p>We believe in the journey of following a tradition of “Sarbat da Bhala” (welfare of all) which is one of the core values of Sikhism. The spiritual message of Guru Nanak, “Kirat Karo (To earn); Naam Japo (To meditate) – Vand Chakko” (To share) has transformed many lives in plights. We are just practicing that selfless spirit in our actions.</p>
+    </div>
+  </div>
+   
+  </div>
+
+   
+
+
+  </div>
+</div>
+<script>
+  function change(value)
+  {
+    if(value == 'Canada')
+    {
+      document.getElementById('Province-div').style.display = 'block';
+      document.getElementById('city-div').style.display = 'block';
+    }else{
+      document.getElementById('Province-div').style.display = 'none';
+      document.getElementById('city-div').style.display = 'none';
+    }
+  }
+</script>
+</body>
+
+</html>
