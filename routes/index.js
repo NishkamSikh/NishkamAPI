@@ -90,7 +90,7 @@ router.get("/ics.js", (req, res) => {
 router.get("/api/v1/testapi", async (req, res) => {
 
 
-  const name = "Jashkaramjit an";
+  const name = "Test API - Success";
   res.status(200).json({
     status: "succes",
     message: `Call From Test Api ${name}`
