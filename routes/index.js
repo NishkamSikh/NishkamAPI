@@ -2599,7 +2599,6 @@ router.get("/api/v1/fetchSingleStudentDetail/:id", async (req, res) => {
 
 router.get("/api/v1/fetchProgressReport", async (req, res) => {
   try {
-    const id = req.params.id;
     // Connect to the database
     await sql.connect(config);
 
