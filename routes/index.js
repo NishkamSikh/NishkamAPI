@@ -2595,6 +2595,26 @@ router.get("/api/v1/fetchSingleStudentDetail/:id", async (req, res) => {
   }
 });
 
+// get Progress Summary
 
+router.get("/api/v1/fetchProgressReport", async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ProgressReport`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
 
 module.exports = router;
