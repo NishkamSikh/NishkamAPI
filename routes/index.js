@@ -245,6 +245,33 @@ router.post("/api/v1/fetchStudentDetails", async (req, res) => {
   }
 });
 
+router.get("/api/v1/fetchAllStudentCode", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = 'SELECT StudentCode FROM v_StudentData';
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
+
+
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
   try {
     // Connect to the SQL Server database
