@@ -15,6 +15,23 @@ const passport = require('passport'); //for authentication
 const initializePassport = require('./passportConfig');
 
 initializePassport(passport);
+app.use((req, res, next) => {
+  // res.setHeader("Access-Control-Allow-Origin", "https://nishkam-app.vercel.app");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  const corsWhitelist = [
+    "http://localhost:3000",
+    "https://nishkam-app.vercel.app",
+];
+if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Origin, X-Requested-With, Accept");
+}
+  // res.setHeader("Access-Control-Allow-Origin", "* , https://restro-wbno.vercel.app");
+  // res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Origin, X-Requested-With, Accept");
+  next();
+});
 
 
 // view engine setup
