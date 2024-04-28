@@ -2651,7 +2651,7 @@ router.get("/api/v1/fetchDashboardSummary", async (req, res) => {
     await sql.connect(config);
 
     // Execute the query
-    const result = await sql.query(`SELECT * FROM v_ReportDB_WithTotal`);
+    const result = await sql.query(`SELECT * FROM v_ReportDB_WithTotal order by state`);
 
     // Close the database connection
     await sql.close();
@@ -2663,5 +2663,26 @@ router.get("/api/v1/fetchDashboardSummary", async (req, res) => {
     res.status(500).send('An error occurred while retrieving data from the database.');
   }
 });
+
+router.get("/api/v1/fetchDonorData", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_DonorData`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+
 
 module.exports = router;
