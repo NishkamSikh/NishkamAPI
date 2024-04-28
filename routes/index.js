@@ -2684,13 +2684,13 @@ router.get("/api/v1/fetchDonorData", async (req, res) => {
 });
 
 
-router.get("/api/v1/fetchDonoBeneficiaryData", async (req, res) => {
+router.get("/api/v1/fetchDonorBeneficiaryData", async (req, res) => {
   try {
     // Connect to the database
     await sql.connect(config);
 
     // Execute the query
-    const result = await sql.query(`SELECT * FROM v_DonoBeneficiaryData`);
+    const result = await sql.query(`SELECT * FROM v_DonorBeneficiaryData`);
 
     // Close the database connection
     await sql.close();
