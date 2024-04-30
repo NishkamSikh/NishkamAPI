@@ -2690,7 +2690,7 @@ router.get("/api/v1/fetchDonorBeneficiaryData_All", async (req, res) => {
     await sql.connect(config);
 
     // Execute the query
-    const result = await sql.query(`SELECT * FROM v_DonorBeneficiaryData`);
+    const result = await sql.query(`SELECT * FROM v_DonorBeneficiaryData_All`);
 
     // Close the database connection
     await sql.close();
