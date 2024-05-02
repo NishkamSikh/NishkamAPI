@@ -271,6 +271,93 @@ router.get("/api/v1/fetchAllStudentCode", async (req, res) => {
   }
 });
 
+router.get("/api/v1/fetchAllDonorCode", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = 'SELECT DonorCode FROM Donor';
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
+
+
+router.post("/api/v1/AddDonorBeneficiary", async (req, res) => {
+  const { BeneficiaryCode, DonorCode, isActive, UserID } = req.body;
+
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Insert a new record into the table
+    const insertQuery = `
+      INSERT INTO DonorBeneficiary (BeneficiaryCode, DonorCode, isActive,UserID)
+      VALUES (@value1,@value2,@value3,@value4)
+    `;
+    const request = new sql.Request();
+    request.input('value1', sql.VarChar, BeneficiaryCode);
+    request.input('value2', sql.VarChar, DonorCode);
+    request.input('value3', sql.Int, isActive);
+    request.input('value4', sql.VarChar,UserID);
+
+    const result = await request.query(insertQuery);
+    console.log('Data inserted successfully');
+    console.log(BeneficiaryCode, "BeneficiaryCode", "DonorCode", DonorCode, "isActive", isActive);
+    res.status(200).json({ status: "success" });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    // Close the connection
+    sql.close();
+  }
+});
+
+router.get("/api/v1/fetchAllClassess", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+    const CatCo = 'CLAS'
+
+    const query = `SELECT * FROM MasterData WHERE CatgCode = @CatCo`; // Parameterized query
+    request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
+
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
+
 
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
   try {
