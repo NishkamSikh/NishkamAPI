@@ -2270,7 +2270,7 @@ router.get("/api/v1/bastilist2", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_MasterBasti`;
+   SELECT * FROM v_MasterBasti order by bastiname`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
