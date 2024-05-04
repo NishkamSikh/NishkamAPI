@@ -954,7 +954,7 @@ router.get("/api/v1/instlist", async (req, res) => {
   sql.connect(config)
     .then(() => {
       // Insert a new record into the table
-      const selectQuery = `SELECT * FROM MasterData WHERE CatgCode = \'INST\'`;
+      const selectQuery = `SELECT * FROM MasterData WHERE CatgCode = \'INST\' order by JSON_VALUE([json],'$.Institution_Name')`;
       const request = new sql.Request();
       return request.query(selectQuery);
     })
