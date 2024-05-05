@@ -2828,5 +2828,61 @@ router.get("/api/v1/fetchDonorBeneficiaryData_UnSponsored", async (req, res) => 
   }
 });
 
+router.get("/api/v1/AreaSummary_State", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_State_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+router.get("/api/v1/AreaSummary_District", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_District_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+router.get("/api/v1/AreaSummary_Basti", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_Basti_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
 
 module.exports = router;
