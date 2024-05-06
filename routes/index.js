@@ -2892,7 +2892,7 @@ router.get("/api/v1/InstitutionStudent", async (req, res) => {
     await sql.connect(config);
 
     // Execute the query
-    const result = await sql.query(`SELECT * FROM v_ReportInstitutionStudent order by Id`);
+    const result = await sql.query(`SELECT * FROM v_ReportInstitutionStudent order by in_institutionname`);
 
     // Close the database connection
     await sql.close();
