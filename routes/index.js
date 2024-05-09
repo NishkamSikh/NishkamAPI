@@ -359,6 +359,38 @@ router.get("/api/v1/fetchAllClassess", async (req, res) => {
 });
 
 
+router.get("/api/v1/fetchAllStream", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+    const CatCo = 'STRM'
+
+    const query = `SELECT * FROM MasterData WHERE CatgCode = @CatCo`; // Parameterized query
+    request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
+
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
+
+
+
+
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
   try {
     // Connect to the SQL Server database
