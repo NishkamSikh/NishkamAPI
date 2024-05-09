@@ -336,7 +336,7 @@ router.get("/api/v1/fetchAllClassess", async (req, res) => {
     const request = new sql.Request();
     const CatCo = 'CLAS'
 
-    const query = `SELECT * FROM MasterData WHERE CatgCode = @CatCo`; // Parameterized query
+    const query = `SELECT * FROM v_MasterClass`; // Parameterized query
     request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
 
     // Execute the query
@@ -358,7 +358,6 @@ router.get("/api/v1/fetchAllClassess", async (req, res) => {
   }
 });
 
-
 router.get("/api/v1/fetchAllStream", async (req, res) => {
   try {
     // Connect to the SQL Server database
@@ -366,7 +365,7 @@ router.get("/api/v1/fetchAllStream", async (req, res) => {
     const request = new sql.Request();
     const CatCo = 'STRM'
 
-    const query = `SELECT * FROM MasterData WHERE CatgCode = @CatCo`; // Parameterized query
+    const query = `SELECT * FROM v_MasterStream`; // Parameterized query
     request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
 
     // Execute the query
