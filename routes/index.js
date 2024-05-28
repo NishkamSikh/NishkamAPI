@@ -2101,7 +2101,7 @@ router.get("/api/v1/studentprofilelist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentProfile`;
+   SELECT * FROM v_StudentProfileList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2159,7 +2159,7 @@ router.get("/api/v1/studentinstitutionlist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentInstitute`;
+   SELECT * FROM v_StudentInstituteList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2214,7 +2214,7 @@ router.get("/api/v1/studentreportcardlist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentReportCard`;
+   SELECT * FROM v_StudentReportCardList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2272,7 +2272,7 @@ router.get("/api/v1/studentacademiclist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentAcademic`;
+   SELECT * FROM v_StudentAcademicList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
