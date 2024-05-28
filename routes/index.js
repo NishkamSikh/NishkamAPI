@@ -2130,7 +2130,7 @@ router.get("/api/v1/studentaddresslist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentAddress`;
+   SELECT * FROM v_StudentAddressList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
