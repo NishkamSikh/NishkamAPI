@@ -2187,7 +2187,7 @@ router.get("/api/v1/studentDocsList", async (req, res) => {
     .then(() => {
 
       // Insert a new record into the table
-      const selectQuery = `SELECT * FROM v_DocumentUpload`;
+      const selectQuery = `SELECT * FROM v_StudentDocumentUpload`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
