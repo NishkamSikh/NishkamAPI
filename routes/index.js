@@ -2690,6 +2690,31 @@ router.post("/api/v1/business/login", function (req, res, next) {
 }
 );
 
+router.get("/api/v1/studenttutorlist", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = 'SELECT * FROM v_StudentTutorList';
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
 
 router.get("/api/v1/fetchAllStudentSummary", async (req, res) => {
   try {
