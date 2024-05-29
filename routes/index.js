@@ -168,6 +168,43 @@ router.post("/api/v1/addStudentData", async (req, res) => {
   }
 });
 
+
+router.post("/api/v1/addTutorRecord", async (req, res) => {
+  try {
+    await sql.connect(config);
+
+    const request = new sql.Request();
+    const { UserId, StudentCode, TutorId, isActive } = req.body;
+    // const photoUrl = await cloudinary.uploader.upload(photo);
+
+    // Modify the query to include the new column
+    const query = 'INSERT INTO StudentTutor (UserId,StudentCode,TutorId,isActive) VALUES (@userId,@StudentCode,@TutorId,@isActive)';
+
+    // Set the values for the new column and other parameters
+    request.input('UserId', sql.NVarChar, UserId);
+    request.input('StudentCode', sql.NVarChar, StudentCode);
+    request.input('TutorId', sql.NVarChar, TutorId);
+    request.input('isActive', sql.NVarChar, isActive);
+
+    // Execute the query
+    await request.query(query);
+
+    console.log('Tutor Data inserted successfully');
+
+    res.status(200).json({
+      status: "success",
+    });
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(400).json({
+      status: "failed",
+    });
+  } finally {
+    sql.close();
+  }
+});
+
 router.post("/api/v1/addFileUpload", async (req, res) => {
   try {
     await sql.connect(config);
@@ -336,7 +373,7 @@ router.get("/api/v1/fetchAllClassess", async (req, res) => {
     const request = new sql.Request();
     const CatCo = 'CLAS'
 
-    const query = `SELECT * FROM MasterData WHERE CatgCode = @CatCo`; // Parameterized query
+    const query = `SELECT * FROM v_MasterClass`; // Parameterized query
     request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
 
     // Execute the query
@@ -358,6 +395,34 @@ router.get("/api/v1/fetchAllClassess", async (req, res) => {
   }
 });
 
+router.get("/api/v1/fetchAllStream", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+    const CatCo = 'STRM'
+
+    const query = `SELECT * FROM v_MasterStream`; // Parameterized query
+    request.input('CatCo', sql.VarChar, CatCo); // Define the parameter
+
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
 
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
   try {
