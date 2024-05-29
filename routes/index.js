@@ -2961,5 +2961,66 @@ router.get("/api/v1/InstitutionStudent", async (req, res) => {
   }
 });
 
+router.post("/api/v1/addDonorData", async (req, res) => {
+
+  const { DonorCode, data } = req.body;
+
+  // Connect to the database
+  sql.connect(config)
+    .then(() => {
+      // console.log('Connected to the Azure SQL Database');
+
+      // Insert a new record into the table
+      const insertQuery = `INSERT INTO Donor (DonorCode,Json) VALUES (@value1, @value2)`;
+     console.log(insertQuery);
+      const request = new sql.Request();
+      request.input('value1', sql.Text, DonorCode);
+      request.input('value2', sql.Text, data);
+      return request.query(insertQuery);
+    })
+    .then(result => {
+      console.log('Data inserted successfully');
+      res.status(200).json({
+        status: "success",
+        data: data
+      });
+      // Close the connection
+      sql.close();
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      sql.close();
+    });
+});
+
+router.get("/api/v1/donorlist", async (req, res) => {
+
+  // Connect to the database
+  sql.connect(config)
+    .then(() => {
+
+      // Insert a new record into the table
+      const selectQuery = `SELECT * FROM v_DonorList`;
+      const request = new sql.Request();
+
+      return request.query(selectQuery);
+    })
+    .then(result => {
+      // console.log('Data inserted successfully');
+      res.status(200).json({
+        status: "success",
+        data: result.recordset
+      });
+      // Close the connection
+      sql.close();
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      sql.close();
+    });
+});
+
+
+
 
 module.exports = router;
