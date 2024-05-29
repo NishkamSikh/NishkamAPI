@@ -204,7 +204,6 @@ router.post("/api/v1/addTutorRecord", async (req, res) => {
     sql.close();
   }
 });
-
 router.post("/api/v1/addFileUpload", async (req, res) => {
   try {
     await sql.connect(config);
@@ -423,6 +422,9 @@ router.get("/api/v1/fetchAllStream", async (req, res) => {
     });
   }
 });
+
+
+
 
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
   try {
@@ -1019,7 +1021,7 @@ router.get("/api/v1/instlist", async (req, res) => {
   sql.connect(config)
     .then(() => {
       // Insert a new record into the table
-      const selectQuery = `SELECT * FROM MasterData WHERE CatgCode = \'INST\'`;
+      const selectQuery = `SELECT * FROM MasterData WHERE CatgCode = \'INST\' order by JSON_VALUE([json],'$.Institution_Name')`;
       const request = new sql.Request();
       return request.query(selectQuery);
     })
@@ -2135,7 +2137,7 @@ router.get("/api/v1/studentprofilelist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentProfile`;
+   SELECT * FROM v_StudentProfileList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2164,7 +2166,7 @@ router.get("/api/v1/studentaddresslist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentAddress`;
+   SELECT * FROM v_StudentAddressList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2193,7 +2195,7 @@ router.get("/api/v1/studentinstitutionlist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentInstitute`;
+   SELECT * FROM v_StudentInstituteList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2248,7 +2250,7 @@ router.get("/api/v1/studentreportcardlist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentReportCard`;
+   SELECT * FROM v_StudentReportCardList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2306,7 +2308,7 @@ router.get("/api/v1/studentacademiclist", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_StudentAcademic`;
+   SELECT * FROM v_StudentAcademicList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2335,7 +2337,7 @@ router.get("/api/v1/bastilist2", async (req, res) => {
 
       // Insert a new record into the table
       const selectQuery = `
-   SELECT * FROM v_MasterBasti`;
+   SELECT * FROM v_MasterBasti order by bastiname`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -2724,6 +2726,31 @@ router.post("/api/v1/business/login", function (req, res, next) {
 }
 );
 
+router.get("/api/v1/studenttutorlist", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = 'SELECT * FROM v_StudentTutorList';
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
 
 router.get("/api/v1/fetchAllStudentSummary", async (req, res) => {
   try {
@@ -2881,6 +2908,83 @@ router.get("/api/v1/fetchDonorBeneficiaryData_UnSponsored", async (req, res) => 
 
     // Execute the query
     const result = await sql.query(`SELECT * FROM v_DonorBeneficiaryData_UnSponsored`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+router.get("/api/v1/AreaSummary_State", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_State_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+router.get("/api/v1/AreaSummary_District", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_District_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+router.get("/api/v1/AreaSummary_Basti", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportArea_Basti_Final order by Id`);
+
+    // Close the database connection
+    await sql.close();
+
+    // Send the JSON data as the response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while retrieving data from the database.');
+  }
+});
+
+
+router.get("/api/v1/InstitutionStudent", async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Execute the query
+    const result = await sql.query(`SELECT * FROM v_ReportInstitutionStudent order by in_institutionname`);
 
     // Close the database connection
     await sql.close();
