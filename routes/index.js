@@ -615,6 +615,48 @@ router.get("/api/v1/getSingleStudentById/:Id", async (req, res) => {
   }
 });
 
+// fetch Donor profile data
+router.get("/api/v1/getSingleDonorById/:Id", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const Id = req.params.Id;
+
+    const request = new sql.Request();
+
+    //const query = `SELECT * FROM StudentData WHERE StudentCode = @StudentCode AND AcademicYear = @AcademicYear AND CatgCode = @CatgCode`;
+    const query = `SELECT * FROM v_Donor WHERE Id = @Id`;
+    request.input('Id', sql.NVarChar, Id);  // Corrected parameter name
+    console.log(query);
+
+    const result = await request.query(query);
+    console.log(result);
+
+    res.status(200).json({
+      status: "success..",
+      data: result.recordset
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "failed",
+      error: error.message
+    });
+  } finally {
+    try {
+      // Check if the pool is not already closed or in the process of connecting
+      if (sql && sql._pool && sql._pool.connections.length > 0) {
+        // Close the connection pool
+        await sql.close();
+      }
+    } catch (error) {
+      console.error('Error closing connection:', error);
+    }
+  }
+});
+
+
+
+
 // fetch Address data
 router.get("/api/v1/getSingleStudentAddress/:Id", async (req, res) => {
   try {
@@ -1006,6 +1048,58 @@ router.put("/api/v1/updateBasicDetail/:Id", async (req, res) => {
     }
   }
 });
+
+//==============================================
+// 11. Update Donor Data//==============================================
+router.put("/api/v1/updateDonorData/:Id", async (req, res) => {
+  try {
+    await sql.connect(config);
+
+    const request = new sql.Request();
+    const { data } = req.body;
+    const Id = req.params.Id;
+
+ const query = 'UPDATE Donor SET Json = @data WHERE Id = @Id';
+
+    // Set the values for the parameters
+    request.input('Id', sql.NVarChar, Id);
+    request.input('data', sql.NVarChar, data);
+
+    // Execute the query
+    const result = await request.query(query);
+
+    // Check if the record was updated successfully
+    if (result.rowsAffected[0] > 0) {
+      console.log('Data updated successfully');
+      res.status(200).json({
+        status: "success",
+      });
+    } else {
+      console.log('User not found or data not updated');
+      res.status(404).json({
+        status: "failed",
+        message: "User not found or data not updated",
+      });
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+    });
+  } finally {
+    try {
+      // Close the connection
+      await sql.close();
+    } catch (error) {
+      console.error('Error closing connection:', error);
+    }
+  }
+});
+
+
+
 
 router.put("/api/v1/updateStudentTutor/:Id", async (req, res) => {
   try {
