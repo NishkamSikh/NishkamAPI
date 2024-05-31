@@ -429,7 +429,7 @@ router.get("/api/v1/fetchAllBeneficiaryDetails", async (req, res) => {
     const pool = await sql.connect(config);
     const request = new sql.Request();
 
-    const query = 'SELECT StudentCode,firstname+\' \'+middlename+\' \'+lastname as Name,dob,gender,Father_Name,ClassName FROM v_StudentData';
+    const query = 'SELECT StudentCode,dd_label,firstname+\' \'+middlename+\' \'+lastname as Name,dob,gender,Father_Name,ClassName FROM v_StudentData';
     // Execute the query
     const result = await request.query(query);
 
