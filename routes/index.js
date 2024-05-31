@@ -423,7 +423,31 @@ router.get("/api/v1/fetchAllStream", async (req, res) => {
   }
 });
 
+router.get("/api/v1/fetchAllBeneficiaryDetails", async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const request = new sql.Request();
 
+    const query = 'SELECT StudentCode,firstname+\' \'+middlename+\' \'+lastname as Name,dob,gender,Father_Name,ClassName FROM v_StudentData';
+    // Execute the query
+    const result = await request.query(query);
+
+    res.status(200).json({
+      status: "success",
+      data: result.recordset,
+    });
+
+    // Close the SQL connection pool
+    await pool.close();
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+});
 
 
 router.get("/api/v1/fetchAllStudentDetails", async (req, res) => {
@@ -776,7 +800,7 @@ router.get("/api/v1/getSingleStudentInst/:Id", async (req, res) => {
   }
 });
 
-// fetch Inst  data
+// fetch StudentTutor data
 router.get("/api/v1/getSingleStudentTutor/:Id", async (req, res) => {
   try {
     const pool = await sql.connect(config);
@@ -815,6 +839,44 @@ router.get("/api/v1/getSingleStudentTutor/:Id", async (req, res) => {
   }
 });
 
+// fetch Donor Beneficiary data
+router.get("/api/v1/getSingleDonorBeneficiary/:Id", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const Id = req.params.Id;
+
+    const request = new sql.Request();
+
+    //const query = `SELECT * FROM StudentData WHERE StudentCode = @StudentCode AND AcademicYear = @AcademicYear AND CatgCode = @CatgCode`;
+    const query = `SELECT * FROM v_DonorBeneficiary WHERE Id = @Id`;
+    request.input('Id', sql.NVarChar, Id);  // Corrected parameter name
+    console.log(query);
+
+    const result = await request.query(query);
+    console.log(result);
+
+    res.status(200).json({
+      status: "success..",
+      data: result.recordset
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "failed",
+      error: error.message
+    });
+  } finally {
+    try {
+      // Check if the pool is not already closed or in the process of connecting
+      if (sql && sql._pool && sql._pool.connections.length > 0) {
+        // Close the connection pool
+        await sql.close();
+      }
+    } catch (error) {
+      console.error('Error closing connection:', error);
+    }
+  }
+});
 
 
 
@@ -1115,6 +1177,57 @@ router.put("/api/v1/updateStudentTutor/:Id", async (req, res) => {
     // Set the values for the parameters
     request.input('Id', sql.VarChar, Id);
     request.input('TutorId', sql.NVarChar, TutorId);
+    request.input('isActive', sql.Bit, isActive);
+
+    // Execute the query
+    const result = await request.query(query);
+
+    // Check if the record was updated successfully
+    if (result.rowsAffected[0] > 0) {
+      console.log('Data updated successfully');
+      res.status(200).json({
+        status: "success",
+      });
+    } else {
+      console.log('User not found or data not updated');
+      res.status(404).json({
+        status: "failed",
+        message: "User not found or data not updated",
+      });
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+    });
+  } finally {
+    try {
+      // Close the connection
+      await sql.close();
+    } catch (error) {
+      console.error('Error closing connection:', error);
+    }
+  }
+});
+
+
+router.put("/api/v1/updateDonorBeneficiary/:Id", async (req, res) => {
+  try {
+    await sql.connect(config);
+
+    const request = new sql.Request();
+    const { DonorCode, BeneficiaryCode,isActive } = req.body;
+    const Id = req.params.Id;
+
+    // Corrected query with proper SQL syntax
+    const query = 'UPDATE DonorBeneficiary SET DonorCode = @DonorCode, BeneficiaryCode=@BeneficiaryCode, isActive = @isActive WHERE Id = @Id';
+
+    // Set the values for the parameters
+    request.input('Id', sql.VarChar, Id);
+    request.input('DonorCode', sql.NVarChar, TutorId);
+    request.input('BeneficiaryCode', sql.NVarChar, TutorId);
     request.input('isActive', sql.Bit, isActive);
 
     // Execute the query
@@ -3230,7 +3343,32 @@ router.get("/api/v1/donorlist", async (req, res) => {
     });
 });
 
+router.get("/api/v1/donorbeneficiarylist", async (req, res) => {
 
+  // Connect to the database
+  sql.connect(config)
+    .then(() => {
+
+      // Insert a new record into the table
+      const selectQuery = `SELECT * FROM v_DonorBeneficiary`;
+      const request = new sql.Request();
+
+      return request.query(selectQuery);
+    })
+    .then(result => {
+      // console.log('Data inserted successfully');
+      res.status(200).json({
+        status: "success",
+        data: result.recordset
+      });
+      // Close the connection
+      sql.close();
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      sql.close();
+    });
+});
 
 
 module.exports = router;
