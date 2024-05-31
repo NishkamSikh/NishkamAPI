@@ -204,6 +204,7 @@ router.post("/api/v1/addTutorRecord", async (req, res) => {
     sql.close();
   }
 });
+
 router.post("/api/v1/addFileUpload", async (req, res) => {
   try {
     await sql.connect(config);
@@ -3350,7 +3351,7 @@ router.get("/api/v1/donorbeneficiarylist", async (req, res) => {
     .then(() => {
 
       // Insert a new record into the table
-      const selectQuery = `SELECT * FROM v_DonorBeneficiary`;
+      const selectQuery = `SELECT * FROM v_DonorBeneficiaryList`;
       const request = new sql.Request();
 
       return request.query(selectQuery);
@@ -3368,6 +3369,40 @@ router.get("/api/v1/donorbeneficiarylist", async (req, res) => {
       console.error('Error:', err);
       sql.close();
     });
+});
+
+
+router.post("/api/v1/addDonorBeneficiaryData", async (req, res) => {
+  try {
+    await sql.connect(config);
+
+    const request = new sql.Request();
+    const { UserId,data } = req.body;
+
+    // Modify the query to include the new column
+    const query = 'INSERT INTO DonorBeneficiary (UserId,json) VALUES (@userId, @data)';
+
+    // Set the values for the new column and other parameters
+    request.input('UserId', sql.NVarChar, UserId);
+    request.input('data', sql.NVarChar, data);
+
+    // Execute the query
+    await request.query(query);
+
+    console.log('Donor Beneficiary Data inserted successfully');
+
+    res.status(200).json({
+      status: "success",
+    });
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(400).json({
+      status: "failed",
+    });
+  } finally {
+    sql.close();
+  }
 });
 
 
