@@ -1366,7 +1366,7 @@ router.post("/api/v1/schoolrecord", async (req, res) => {
 
 
 //===========================
-// School API END
+// School API 
 //===========================
 
 //===========================
@@ -3377,14 +3377,16 @@ router.post("/api/v1/addDonorBeneficiaryData", async (req, res) => {
     await sql.connect(config);
 
     const request = new sql.Request();
-    const { UserId,data } = req.body;
-
-    // Modify the query to include the new column
-    const query = 'INSERT INTO DonorBeneficiary (UserId,json) VALUES (@userId, @data)';
+    //const { UserId,data } = req.body;
+    const { userId,donorCode,beneficiaryCode,status} = req.body;
 
     // Set the values for the new column and other parameters
-    request.input('UserId', sql.NVarChar, UserId);
-    request.input('data', sql.NVarChar, data);
+    request.input('donorCode', sql.NVarChar, donorCode);
+    request.input('beneficiaryCode', sql.NVarChar, beneficiaryCode);
+    request.input('status', sql.NVarChar, status);
+    request.input('userId', sql.NVarChar, userId);
+
+    const query = 'INSERT INTO DonorBeneficiary (DonorCode,BeneficiaryCode,Status,UserId) values (@donorCode,@beneficiaryCode,@status,@userId)';
 
     // Execute the query
     await request.query(query);
@@ -3404,6 +3406,7 @@ router.post("/api/v1/addDonorBeneficiaryData", async (req, res) => {
     sql.close();
   }
 });
+
 
 
 module.exports = router;
