@@ -450,13 +450,13 @@ router.get("/api/v1/fetchAllBeneficiaryDetails", async (req, res) => {
   }
 });
 
-router.get("/api/v1/fetchAllStudentDetails_DD", async (req, res) => {
+router.get("/api/v1/fetchAllStudentDetails_in", async (req, res) => {
   try {
     // Connect to the SQL Server database
     const pool = await sql.connect(config);
     const request = new sql.Request();
 
-    const query = 'SELECT StudentCode,AcademicYear,StudentKey,dd_label FROM v_StudentData';
+    const query = 'SELECT StudentCode,AcademicYear,StudentKey,dd_label,in_disable FROM v_StudentData';
     // Execute the query
     const result = await request.query(query);
 
