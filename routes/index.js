@@ -97,6 +97,81 @@ router.get("/api/v1/testapi", async (req, res) => {
   })
 
 });
+router.get('/api/v1/getAllUsers', async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const query = 'SELECT * FROM Users';
+    const result = await pool.request().query(query);
+
+    res.status(200).json({
+      status: 'success',
+      data: result.recordset,
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      error: error.message,
+    });
+  } finally {
+    // Close the SQL connection pool
+    // await sql.close();
+  }
+});
+
+router.get('/api/v1/getAllpages', async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const query = 'SELECT * FROM pages';
+    const result = await pool.request().query(query);
+
+    res.status(200).json({
+      status: 'success',
+      data: result.recordset,
+    });
+  } catch (error) {
+    console.error('Error fetching pages:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      error: error.message,
+    });
+  } finally {
+    // Close the SQL connection pool
+    // await sql.close();
+  }
+});
+router.get('/api/v1/getAllUserPermissions', async (req, res) => {
+  try {
+    // Connect to the SQL Server database
+    const pool = await sql.connect(config);
+    const query = 'SELECT * FROM user_permissions';
+    const result = await pool.request().query(query);
+
+    // Ensure result.recordset is an array
+    const data = Array.isArray(result.recordset) ? result.recordset : [];
+
+    res.status(200).json({
+      status: 'success',
+      data: data,
+    });
+  } catch (error) {
+    console.error('Error fetching permissions:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      error: error.message,
+    });
+  } finally {
+    // Close the SQL connection pool
+    // await pool.close();
+  }
+});
+
+
 
 router.get("/api/v1/skmtutor", async (req, res) => {
 
@@ -165,6 +240,47 @@ router.post("/api/v1/addStudentData", async (req, res) => {
     });
   } finally {
     sql.close();
+  }
+});
+router.post("/api/v1/permissions", async (req, res) => {
+  try {
+    await sql.connect(config);
+
+    const { userId, pageId, granted } = req.body;
+    
+    // Ensure userId and pageId are strings
+    if (typeof userId !== 'string' || typeof pageId !== 'string') {
+      throw new Error('Invalid userId or pageId');
+    }
+    
+    const request = new sql.Request();
+    request.input('userId', sql.NVarChar, userId.trim());
+    request.input('pageId', sql.NVarChar, pageId.trim());
+
+    if (granted) {
+      const query = 'INSERT INTO user_permissions (user_id, page_id) VALUES (@userId, @pageId)';
+      await request.query(query);
+      console.log('Data inserted successfully');
+      res.status(200).json({
+        status: "success",
+      });
+    } else {
+      const query = 'DELETE FROM user_permissions WHERE user_id = @userId AND page_id = @pageId';
+      await request.query(query);
+
+      console.log('Data deleted successfully');
+      res.status(200).json({
+        status: "success",
+        message: "Data Deleted"
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(400).json({
+      status: "failed",
+    });
+  } finally {
+    // sql.close();
   }
 });
 
@@ -350,7 +466,7 @@ router.post("/api/v1/AddDonorBeneficiary", async (req, res) => {
     request.input('value1', sql.VarChar, BeneficiaryCode);
     request.input('value2', sql.VarChar, DonorCode);
     request.input('value3', sql.Int, isActive);
-    request.input('value4', sql.VarChar,UserID);
+    request.input('value4', sql.VarChar, UserID);
 
     const result = await request.query(insertQuery);
     console.log('Data inserted successfully');
@@ -966,7 +1082,7 @@ router.put("/api/v1/updateBasicDetail/:Id", async (req, res) => {
     const { data } = req.body;
     const Id = req.params.Id;
 
- const query = 'UPDATE StudentData SET Json = @data WHERE Id = @Id';
+    const query = 'UPDATE StudentData SET Json = @data WHERE Id = @Id';
 
     // Set the values for the parameters
     request.input('Id', sql.NVarChar, Id);
@@ -2867,7 +2983,7 @@ router.get("/api/v1/fetchSingleStudentDetail/:id", async (req, res) => {
     await sql.connect(config);
 
     // Execute the query
-//    const result = await sql.query(`SELECT * FROM v_StudentData WHERE profileid = 276`);
+    //    const result = await sql.query(`SELECT * FROM v_StudentData WHERE profileid = 276`);
     const result = await sql.query(`SELECT * FROM v_StudentData WHERE profileid = ${id}`);
 
     // Close the database connection
